@@ -1,18 +1,26 @@
 {
-    "author": "Markus Peröbner <markus.peroebner@gmail.com>",
-    "name": "osm-read",
+    "contributors" : [
+        {
+            "author": "Markus Peröbner <markus.peroebner@gmail.com>"
+        },  
+        {
+          "name" : "James Vickers"
+        }
+    ],
+    
+    "name": "osm-read-enhanced",
     "description": "an openstreetmap XML and PBF data parser",
     "tags": [
         "osm",
         "openstreetmap"
     ],
-    "version": "0.7.0",
+    "version": "0.0.1",
     "repository": {
         "type": "git",
-        "url": "https://github.com/marook/osm-read.git"
+        "url": "https://github.com/metabench/osm-read-enhanced.git"
     },
     "bugs": {
-        "url": "https://github.com/marook/osm-read/issues"
+        "url": "https://github.com/metabench/osm-read-enhanced/issues"
     },
     "main": "lib/main.js",
     "browser": {
@@ -25,22 +33,22 @@
         "browserifyDebug": "browserify ./lib/pbfParser.js --bare -s=pbfParser -d -o osm-read-pbf.js"
     },
     "engines": {
-        "node": ">=0.10.0"
+        "node": ">=15.0.0"
     },
     "dependencies": {
-        "http-server": "^0.11.1",
+        "http-server": "^14.1.1",
         "node-xml": "1.0.2",
-        "protobufjs": "6.8.8"
+        "protobufjs": "7.1.2"
     },
     "optionalDependencies": {
-        "zlibjs": "0.2.0",
-        "setimmediate": "1.0.2"
+        "zlibjs": "0.3.1",
+        "setimmediate": "1.0.5"
     },
     "devDependencies": {
-        "browserify": "^16.5.0",
+        "browserify": "^17.0.0",
         "bytebuffer": "5.0.1",
         "minifyify": "7.3.5",
-        "mocha": "6.2.1",
+        "mocha": "10.1.0",
         "should": "13.2.3"
     },
     "licenses": [
