@@ -1,2 +1,6 @@
 /node_modules
 .vscode
+
+*.pbf
+.DS_Store
+/package-lock.json

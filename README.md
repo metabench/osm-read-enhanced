@@ -5,6 +5,7 @@
     1. Simple Usage Example
     2. Parse OSM XML from URL Example
     3. PBF random access parser
+    4. Progress Tracking and Verbose Logging
 3. Version Upgrade Guide
 4. TODOs
 5. License
@@ -196,6 +197,44 @@ osmread.createPbfParser({
 
 ***Don't forget to close the parser after usage!***
 
+
+------------------------------------------------------------------------
+#### Progress Tracking and Verbose Logging
+
+The PBF parser now includes the following features:
+
+1. **Progress Tracking**:
+   - The parser logs the progress of parsing in terms of MB/s and total MB read.
+   - This is enabled by default and logs progress every second.
+
+2. **Verbose Logging**:
+   - When the `verbose` option is set to `true`, detailed logs are printed for each step of the parsing process.
+   - This includes information about file blocks, blob headers, and decoding status.
+
+Example usage:
+
+```javascript
+osmread.parse({
+    filePath: 'path/to/osm.pbf',
+    verbose: true, // Enable verbose logging
+    endDocument: function(){
+        console.log('Parsing completed.');
+    },
+    error: function(err){
+        console.error('Error:', err);
+    }
+});
+```
+
+Output:
+
+```
+[VERBOSE] Starting pbf parsing. Opening file: path/to/osm.pbf
+[VERBOSE] File opened successfully. Number of file blocks found: 10
+[VERBOSE] Found file block { blobIndex: 0, fileBlockPosition: 0, headerType: 'OSMHeader', datasize: 12345 }
+Progress: 1.23 MB/s, total read: 2.34 MB
+...
+```
 
 ------------------------------------------------------------------------
 #### Version Upgrade Guide

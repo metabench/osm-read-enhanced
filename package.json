@@ -14,7 +14,7 @@
         "osm",
         "openstreetmap"
     ],
-    "version": "0.0.5",
+    "version": "0.0.6",
     "repository": {
         "type": "git",
         "url": "https://github.com/metabench/osm-read-enhanced.git"
@@ -27,7 +27,7 @@
         "protobufjs": "protobufjs/dist/ProtoBuf.noparse.js"
     },
     "scripts": {
-        "test": "mocha test",
+        "test": "node test/pbfTest.js",
         "buildProto": "pbjs -t static-module -w commonjs lib/proto/fileformat.proto lib/proto/osmformat.proto > lib/proto/index.js",
         "browserify": "browserify ./lib/pbfParser.js --bare -s=pbfParser -d -p [minifyify --map osm-read-pbf.map.json --output osm-read-pbf.map.json] -o osm-read-pbf.js",
         "browserifyDebug": "browserify ./lib/pbfParser.js --bare -s=pbfParser -d -o osm-read-pbf.js"
@@ -36,20 +36,15 @@
         "node": ">=15.0.0"
     },
     "dependencies": {
-        "http-server": "^14.1.1",
-        "node-xml": "1.0.2",
-        "protobufjs": "7.1.2"
+        "protobufjs": "7.5.3",
+        "lang-mini": "0.0.40"
     },
     "optionalDependencies": {
         "zlibjs": "0.3.1",
         "setimmediate": "1.0.5"
     },
     "devDependencies": {
-        "browserify": "^17.0.0",
-        "bytebuffer": "5.0.1",
-        "minifyify": "7.3.5",
-        "mocha": "10.1.0",
-        "should": "13.2.3"
+        "bytebuffer": "5.0.1"
     },
     "licenses": [
         {
