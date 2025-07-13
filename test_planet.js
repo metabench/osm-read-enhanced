@@ -6,6 +6,18 @@ const fs = require('fs');
  * Reads through the full planet PBF file and logs progress every second
  */
 
+// Configure decompression workers for high performance
+// Set to 24 workers for maximum throughput on high-end systems
+osmread.configureDecompressionWorkers({
+    enabled: true,
+    maxWorkers: 24,
+    minWorkers: 4,
+    optimalWorkers: 16,
+    scalingMode: 'conservative' // Options: 'conservative', 'aggressive', 'fixed'
+});
+
+console.log('Configured decompression workers: 24 max workers with conservative scaling for high-performance parsing');
+
 const planetPath = 'd:\\planet-250203.osm.pbf';
 
 // Check if file exists
@@ -48,12 +60,12 @@ const progressInterval = setInterval(() => {
         let workerStatsStr = '';
         if (elapsedTotal - workerStatsLastReported >= 5) {
             try {
-                const zlib = require('./lib/nodejs/zlib');
-                const stats = zlib.getWorkerPoolStats();
+                const stats = osmread.getWorkerPoolStats();
                 const totalQueued = (stats.queuedTasks || 0) + (stats.priorityTasks || 0);
-                const memPressure = stats.memoryPressure ? ` Mem:${stats.memoryPressure}%` : '';
-                const efficiency = stats.workerEfficiency ? ` Eff:${stats.workerEfficiency}t/s` : '';
-                workerStatsStr = ` | Workers: ${stats.totalWorkers} (${stats.busyWorkers} busy, ${totalQueued} queued${memPressure}${efficiency})`;
+                const memPressure = stats.memoryPressure ? ` Mem:${(stats.memoryPressure * 100).toFixed(1)}%` : '';
+                const efficiency = stats.workerEfficiency ? ` Eff:${stats.workerEfficiency.toFixed(1)}t/s` : '';
+                const workersEnabled = stats.decompressionWorkersEnabled ? 'ENABLED' : 'DISABLED';
+                workerStatsStr = ` | Decompression Workers: ${workersEnabled} (${stats.totalWorkers} total, ${stats.busyWorkers} busy, ${totalQueued} queued${memPressure}${efficiency})`;
                 workerStatsLastReported = elapsedTotal;
             } catch (e) {
                 // Stats not available
@@ -144,15 +156,15 @@ osmread.parse({
         // Get final worker pool stats
         let finalWorkerStats = '';
         try {
-            const zlib = require('./lib/nodejs/zlib');
-            const stats = zlib.getWorkerPoolStats();
-            finalWorkerStats = `\nWorker Pool Final Stats:
+            const stats = osmread.getWorkerPoolStats();
+            finalWorkerStats = `\nDecompression Worker Pool Final Stats:
+  Workers Enabled: ${stats.decompressionWorkersEnabled ? 'YES' : 'NO'}
   Peak Workers: ${stats.peakWorkerCount}
   Tasks Completed: ${stats.tasksCompleted.toLocaleString()}
   Avg Processing Time: ${stats.avgProcessingTime}ms
   Final Efficiency: ${stats.workerEfficiency} tasks/s
-  Peak Memory Pressure: ${stats.memoryPressure}%`;
-            zlib.shutdownWorkerPool(); // Clean shutdown
+  Peak Memory Pressure: ${(stats.memoryPressure * 100).toFixed(1)}%`;
+            osmread.shutdownWorkerPool(); // Clean shutdown
         } catch (e) {
             // Stats not available
         }

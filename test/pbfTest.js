@@ -159,10 +159,10 @@ test('Comprehensive PBF Parsing: Validate Ways', async (t) => {
 
     await t.test('Ways are parsed correctly', async () => {
         const blocks = parser.findFileBlocksByBlobType('OSMData');
-        assert.ok(blocks.length > 0);
+        assert.ok(blocks.length > 2); // Ensure we have at least 3 blocks
 
         await new Promise((resolve, reject) => {
-            parser.readBlock(blocks[0], (err, block) => {
+            parser.readBlock(blocks[2], (err, block) => { // Use block 2 which contains ways
                 if (err) {
                     reject(err);
                 } else {
